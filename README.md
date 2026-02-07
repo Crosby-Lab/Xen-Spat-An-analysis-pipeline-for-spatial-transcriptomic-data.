@@ -1,1 +1,3 @@
-Xen-Spat: An analysis pipeline for spatial transcriptomic data to track multi-cellular interactions in the tumor microenvironment.
+**Xen-Spat: An analysis pipeline for spatial transcriptomic data to track multi-cellular interactions in the tumor microenvironment.**
+
+Spatial transcriptomics data analysis can be broadly classified into two types, single cell analysis and spatial data analysis. Integrating these two separate analysis pipelines to generate biologically meaningful features for patient stratification remains a challenge. To address this issue, we have designed an analysis pipeline called XEN-SPAT to systematically quantify cell-cell interaction, identifying multi-cellular niches, measure spatial colocalization and define enrichment of different cell types in tumor micro environment. 
