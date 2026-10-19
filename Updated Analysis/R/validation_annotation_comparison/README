@@ -1,1 +1,56 @@
 
+# Comparison of the automatic compartment assignment with the published annotation
+
+These scripts reproduce Figure S17 and the numbers quoted for it in Sections 2.7
+and 3.6. They are a one-off analysis for the validation cohort, not part of the
+Xen-Spat pipeline, and are included so the comparison can be checked.
+
+## Inputs
+
+All inputs are from the public Xenium breast dataset (reference 26 of the
+manuscript) and are not redistributed here:
+
+| File | Used by |
+|---|---|
+| `XeniumdataNiche_analysis_test_S1_TOP*.csv` (cells, coordinates, cell type labels) | `rebuild_niches.py` |
+| `XeniumdataNiche_S3_TOP_*_25.csv`, `XeniumdataNiche_S4_TOP_*_25.csv` (cells with saved niche assignment) | `validation_all.py` |
+| Figure 7a of the manuscript, for the annotated region outlines | `register.py` |
+
+## Order
+
+```
+python rebuild_niches.py     # recovers the S1_TOP niche assignment (see note)
+python search.py             # confirms it is stable across random starts
+python register.py           # registers the annotated regions to the Xenium frame
+python stats.py              # capture and purity for S1_TOP, region by region
+python validation_all.py     # gap profile, capture and purity for S1/S3/S4_TOP
+python figS17.py             # draws Figure S17
+```
+
+`PAPER_STYLE.py` holds the figure colors and fonts used by the manuscript
+figures and is imported by `figS17.py`.
+
+## Note on S1_TOP
+
+The niche assignment that produced Figure 7c was not saved. The post-niche CSV
+exists for S1_BOT, S2_TOP, S3_TOP and S4_TOP but not for S1_TOP, and the file
+that does exist for S1_TOP has the cells, coordinates and cell type labels but
+no niche column. `rebuild_niches.py` re-runs the BuildNicheAssay algorithm on
+that metadata: 25 nearest neighbors including self, one-hot cell type, neighbor
+sums, per-feature z-score clipped at +/- 10, k-means with k equal to the number
+of cell types. It is stable across 40 random starts and reproduces the published
+Table S8 coefficients to within 0.02. S3_TOP and S4_TOP use their saved niche
+assignments and reproduce Table S8 exactly.
+
+Re-running the original niche script on S1_TOP and saving the result would make
+this reconstruction unnecessary.
+
+## Registration
+
+`register.py` rasterizes the cell centroids at 8 um per pixel and fits an affine
+transform from the H&E tissue outline to that raster with `cv2.findTransformECC`
+(note that the matrix it returns is template to input, so `cv2.warpAffine` needs
+`WARP_INVERSE_MAP`). The two outlines overlap with a Jaccard index of 0.92.
+Cells are then assigned to regions by a point-in-polygon test. This registration
+affects Figure S17a and S17b only; the capture and purity numbers in S17c and
+S17d use the published cell type labels and need no registration.
