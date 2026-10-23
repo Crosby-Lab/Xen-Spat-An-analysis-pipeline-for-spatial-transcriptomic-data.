@@ -1,0 +1,23 @@
+# Xen-Spat: Python environment for the revision / "Updated Analysis" scripts (DRAFT)
+# Covers: Updated Analysis/*.py, revision_macrophage_analysis/*.py,
+#         R/validation_annotation_comparison/*.py
+# Tested 2026-10-23 on CPython 3.11 with unpinned packages: installs, all script imports
+# work, and all scripts byte-compile. Scripts were not run (inputs are not in the repo).
+# Only pydeseq2 has a documented version (README_B6.txt). The Python version and all
+# other versions are NOT recorded in the repository. Fill in from the machine that ran
+# the scripts (python --version; pip freeze) before release.
+name: xenspat-updated
+channels:
+  - conda-forge
+dependencies:
+  - python>=3.11  # PyDESeq2 0.5.4 requires >=3.11; TODO: record exact version used
+  - numpy         # TODO
+  - pandas        # TODO
+  - scipy         # TODO
+  - scikit-learn  # TODO (KMeans in rebuild_niches.py, search.py)
+  - statsmodels   # TODO (multipletests in morisita_ses_final.py)
+  - matplotlib    # TODO
+  - anndata       # TODO (niche_neighborhood_radius.py, h5ad input)
+  - pip
+  - pip:
+      - pydeseq2==0.5.4
