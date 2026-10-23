@@ -1,0 +1,20 @@
+# Xen-Spat: Python environment for the original pipeline (DRAFT)
+# Covers: Source Code with Raw Data/Celltype_Label.py and Dataintegration_Uniform.py
+# Versions below are copied from the script headers. Nothing else is pinned.
+# Tested 2026-10-23 with uv/pip on CPython 3.9.0: installs and all imports succeed.
+# Verify against the environment that generated the published results.
+name: xenspat-original
+channels:
+  - conda-forge
+dependencies:
+  - python=3.9.0
+  - numpy=1.23.4
+  - pandas=2.3.3        # header reads "panda 2.3.3"; confirm
+  - matplotlib=3.7.2
+  - seaborn=0.12.2
+  - "setuptools<81"   # required: xarray-schema (via squidpy) imports pkg_resources, removed in setuptools 82
+  - pip
+  - pip:
+      - scanpy==1.9.3
+      - squidpy==1.6.1
+      - bbknn==1.6.0
